@@ -1,0 +1,40 @@
+/*
+Error: Invalid CSS after "...trap/variables"": expected "{", was ";"
+        on line 4 of C:\xampp\htdocs\flat-able-admin\bower_components\select2\docs\css\s2-docs.scss
+
+1: ---
+2: ---
+3: 
+4: @import "vendor/bootstrap/variables";
+5: 
+6: @import "result-repository";
+7: @import "sidenav";
+8: @import "hamburger";
+9: @import "code";
+
+Backtrace:
+C:\xampp\htdocs\flat-able-admin\bower_components\select2\docs\css\s2-docs.scss:4
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1165:in `expected'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1101:in `expected'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:1096:in `tok!'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:641:in `block'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:635:in `ruleset'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:660:in `block_child'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:650:in `block_contents'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:117:in `stylesheet'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/scss/parser.rb:42:in `parse'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:393:in `_to_tree'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:368:in `_render_with_sourcemap'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/engine.rb:285:in `render_with_sourcemap'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/exec/sass_scss.rb:396:in `run'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/exec/sass_scss.rb:62:in `process_result'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/exec/base.rb:52:in `parse'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/lib/sass/exec/base.rb:19:in `parse!'
+C:/Program Files (x86)/Koala/rubygems/gems/sass-3.4.9/bin/sass:13:in `<top (required)>'
+C:/Program Files (x86)/Koala/bin/sass:18:in `load'
+C:/Program Files (x86)/Koala/bin/sass:18:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Invalid CSS after \"...trap/variables\"\": expected \"{\", was \";\"\A         on line 4 of C:\xampp\htdocs\flat-able-admin\bower_components\select2\docs\css\s2-docs.scss\A \A 1: ---\A 2: ---\A 3: \A 4: @import \"vendor/bootstrap/variables\";\A 5: \A 6: @import \"result-repository\";\A 7: @import \"sidenav\";\A 8: @import \"hamburger\";\A 9: @import \"code\";"; }

@@ -1,0 +1,3 @@
+<a href="{{$url_show}}" title="Detail: {{$customers->customer_name}}" class="btn btn-info waves-effect waves-light view_customer"><i class="icofont icofont-open-eye"></i></a>
+<a href="{{$url_edit}}" title="Edit customer: {{$customers->customer_name}}" class="btn btn-success waves-effect waves-light modal-show edit"><i class="icofont icofont-pencil"></i></a>
+<a href="javascript:" rel="{{$customers->id}}" rel1='delete_customer' title="{{$customers->customer_name}}" class="btn btn-danger waves-effect waves-light delete-customer"><i class="icofont icofont-delete-alt"></i></a>
