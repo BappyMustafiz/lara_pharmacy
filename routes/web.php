@@ -39,6 +39,9 @@ Route::group(['middleware' =>['auth']], function(){
 	Route::post('/admin/update_cart', 'PosController@update_cart');
 	Route::post('/admin/delete_cart', 'PosController@delete_cart');
     Route::match(['get','post'],'/admin/medicine_quick_add','PosController@medicine_quick_add');
+    Route::post('/admin/add_payment', 'PosController@add_payment_type');
+    Route::post('/admin/delete_payment', 'PosController@delete_payment_type');
+    Route::post('/admin/order-submit', 'PosController@order_submit');
 
 	/*Customer routes*/
 	Route::resource('/admin/customer', 'CustomerController');

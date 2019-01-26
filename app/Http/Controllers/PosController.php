@@ -134,4 +134,95 @@ class PosController extends Controller
         $categories = DB::table('categories')->where('status', 'Active')->get();
         return view('admin.pos.quick_add_medicine')->with(compact('categories'));
     }
+
+    /**
+     * add payment type and value
+     * ajax route
+     */
+    public function add_payment_type(Request $request){
+        $net_amount = $request->input('net_amount');
+        $payment_type = $request->input('payment_type');
+        $paid_amount = $request->input('paid_amount');
+
+        $payment_details[$payment_type] = $paid_amount;
+
+        if(session('payment_details')){
+            $payment = session('payment_details');
+            if(array_key_exists($payment_type,$payment)){
+                $previous_amount = $payment[$payment_type];
+                $paid_amount += $previous_amount;
+                $payment[$payment_type] = $paid_amount;
+                session(['payment_details' => $payment]);
+            }else{
+                $payment[$payment_type] = $paid_amount;
+                session(['payment_details' => $payment]);
+            }
+        }else{
+           session(['payment_details' => $payment_details]);
+           $payment = session('payment_details');
+           return $payment;
+        }
+        return $payment;
+    }
+
+    /**
+     * delete payment type
+     * ajax route
+     */
+    public function delete_payment_type(Request $request){
+        $payment_type = $request->input('payment_type');
+        $paid_amount = $request->input('paid_amount');
+
+        $payment = session('payment_details');
+        unset($payment[$payment_type]);
+        $new_payment = $payment;
+        session(['payment_details' => $new_payment]);
+        return $new_payment;
+    }
+
+    /**
+     * order submit method
+     */
+    public function order_submit(Request $request){
+        $items = Cart::getContent();
+        $details = [];
+        foreach ($items as $item){
+            $medicine_id = $item->id;
+            $medicine_name = $item->name;
+            $medicine_qty = $item->quantity;
+            $medicine_price = $item->price;
+            $details[] = array(
+                'medicine_id' => $medicine_id,
+                'medicine_name' => $medicine_name,
+                'medicine_qty' => $medicine_qty,
+                'medicine_price' => $medicine_price,
+            );
+        }
+
+        $medicine_details = serialize($details);
+
+        $total = $request->input('total');
+        $discount = $request->input('discount');
+        $customer_id = $request->input('customer_id');
+
+        $payments = session('payment_details');
+        $payment_details = serialize($payments);
+
+        $data_arr = array(
+            'medicine_details' => $medicine_details,
+            'customer_id' => $customer_id,
+            'total' => $total,
+            'discount' => $discount,
+            'payment_details' => $payment_details
+        );
+
+        session(['order_details'=> $data_arr]);
+
+        if (DB::table('orders')->insert($data_arr)){
+            Session::forget('payment_details');
+            Cart::clear();
+            return view('admin.pos.view_invoice');
+        }
+
+    }
 }

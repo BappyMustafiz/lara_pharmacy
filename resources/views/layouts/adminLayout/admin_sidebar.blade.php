@@ -18,7 +18,7 @@
     <div class="main-menu-content">
         <ul class="main-navigation">
             <li class="more-details">
-                <a href="{{url('/admin/user_profile')}}"><i class="ti-user"></i>View Profile</a>
+                <a href="{{url('/admin/usp')}}"><i class="ti-user"></i>View Profile</a>
                 <a href="{{url('/admin/settings')}}"><i class="ti-settings"></i>Settings</a>
                 <a href="{{url('/logout')}}"><i class="ti-layout-sidebar-left"></i>Logout</a>
             </li>

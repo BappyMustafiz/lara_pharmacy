@@ -5,6 +5,7 @@
     <title>Welcome to admin - Pharmacy Management System</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Phoenixcoded">
     <meta name="keywords" content=", Flat ui, Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
@@ -147,7 +148,7 @@
     <script>
         // restrict user typing non numeric in input field
         function numbersOnly(input){
-            var regex = /[^1-9]/gi;
+            var regex = /[^0-9]/gi;
             input.value = input.value.replace(regex,'');
         }
         $(document).ready(function(){

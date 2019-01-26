@@ -68,7 +68,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url('/admin/user_profile')}}">
+                                <a href="{{url('/admin/usp')}}">
                                     <i class="ti-user"></i> Profile
                                 </a>
                             </li>

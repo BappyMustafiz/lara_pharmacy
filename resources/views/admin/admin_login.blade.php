@@ -35,7 +35,7 @@
                         <form id="loginForm" class="md-float-material" method="post" action="{{url('admin')}}">
                             @csrf
                             <div class="text-center">
-                                <img src="{{asset('images/backend_images/logo.png')}}" alt="logo.png">
+                                <img src="{{asset('images/backend_images/invoice_logo2.png')}}" alt="logo.png">
                             </div>
                             <div class="auth-box">
                                 @if(Session::has('flash_message_error'))
