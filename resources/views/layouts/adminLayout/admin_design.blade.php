@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/backend_css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/backend_css/font-awesome.min.css')}}">
     <!-- themify icon -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/backend_css/themify-icons/themify-icons.css')}}">
     <!-- ico font -->
@@ -69,6 +70,36 @@
 
         .list:hover {
             color: #1abc9c;
+        }
+
+        .error-container {
+            width: 500px;
+            margin: 50px auto 0px;
+        }
+        .error-container .error-code {
+            float: left;
+            width: 100%;
+            font-size: 135px;
+            line-height: 130px;
+            text-align: center;
+            color: #333;
+            font-weight: 300;
+        }
+        .error-container .error-text {
+            float: left;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 26px;
+            line-height: 24px;
+            text-transform: uppercase;
+            color: #666;
+            text-align: center;
+            font-weight: 400;
+        }
+        .error-container .error-actions {
+            float: left;
+            width: 100%;
+            margin-top: 10px;
         }
     </style>
 </head>

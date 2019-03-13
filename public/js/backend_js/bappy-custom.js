@@ -157,6 +157,20 @@ $('body').on('click','.add-medicine', function(event){
 
 });
 
+//print invoice
+
+var el = document.getElementById("printInvoice");
+if(el){
+    el.addEventListener("click", function() {
+        var printContents = document.getElementById('printDiv').innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    });
+}
+
+
 // autocomplete for POS
 // $(document).ready(function(){
 //   $('#medicine_title').keyup(function(){

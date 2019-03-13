@@ -16,10 +16,11 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('medicine_details',1024);
-            $table->integer('customer_id')->nullable();
+            $table->string('customer_details',1024);
             $table->string('payment_details',1024);
             $table->decimal('total',10,2);
-            $table->decimal('discount',10,2);
+            $table->decimal('discount',10,2)->nullable();
+            $table->string('status')->default('Active');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

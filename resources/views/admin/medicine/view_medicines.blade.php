@@ -51,13 +51,12 @@
 		                                    <tr>
 		                                        <th>#</th>
 		                                        <th>Medicine title</th>
-                                                <th>Medicine category</th>
-                                                <th>Generic name</th>
                                                 <th>Company name</th>
                                                 <th>Purchase price</th>
                                                 <th>Selling price</th>
-                                                <th>Stored box</th>
 		                                        <th>Quantity</th>
+                                                <th>Stock alert</th>
+                                                <th>Self Number</th>
 		                                        <th>Expiry date</th>
                                                 <th>Status</th>
 		                                        <th>Action</th>
@@ -67,13 +66,12 @@
 		                                    <tr>
 		                                        <th>#</th>
                                                 <th>Medicine title</th>
-                                                <th>Medicine category</th>
-                                                <th>Generic name</th>
                                                 <th>Company name</th>
                                                 <th>Purchase price</th>
                                                 <th>Selling price</th>
-                                                <th>Stored box</th>
                                                 <th>Quantity</th>
+                                                <th>Stock alert</th>
+                                                <th>Self Number</th>
                                                 <th>Expiry date</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
@@ -110,13 +108,12 @@
                 "columns":[
                     {"data" : "id"},
                     {"data" : "medicine_title"},
-                    {"data" : "category_title"},
-                    {"data" : "generic_name"},
                     {"data" : "company_name"},
                     {"data" : "purchase_price"},
                     {"data" : "selling_price"},
-                    {"data" : "stored_box"},
                     {"data" : "quantity"},
+                    {"data" : "stock_alert"},
+                    {"data" : "self_number"},
                     {"data" : "expiry_date"},
                     {"data" : "status"},
                     {"data" : "action"},

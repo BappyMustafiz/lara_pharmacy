@@ -143,6 +143,12 @@
                     <span data-i18n="nav.submit-issue.main">Profile</span>
                 </a>
             </li>
+            <li class="nav-item single-item">
+                <a href="{{url('/logout')}}">
+                    <i class="ti-share-alt"></i>
+                    <span data-i18n="nav.submit-issue.main">Log Out</span>
+                </a>
+            </li>
             <!-- user profile menu-->
         </ul>
     </div>

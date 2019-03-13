@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-md-6 col-sm-6">
             <div class="form-group">
-                <label class="col-form-label">Generic Name <span class="text-danger">( Required )</span></label>
+                <label class="col-form-label">Generic Name</label>
                 <input type="text" class="form-control" name="generic_name" id="generic_name">
             </div>
         </div>
@@ -59,6 +59,20 @@
             <div class="form-group">
                 <label class="col-form-label">Quantity <span class="text-danger">( Required )</span></label>
                 <input type="number" class="form-control" name="quantity" id="quantity">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="form-group">
+                <label class="col-form-label">Stock Alert</label>
+                <input type="number" class="form-control" name="stock_alert" id="stock_alert">
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6">
+            <div class="form-group">
+                <label class="col-form-label">Self Number </label>
+                <input type="text" class="form-control" name="self_number" id="self_number">
             </div>
         </div>
     </div>

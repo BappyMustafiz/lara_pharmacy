@@ -23,7 +23,9 @@ class CreateMedicinesTable extends Migration
             $table->float('selling_price', 10, 2);
             $table->integer('stored_box');
             $table->integer('quantity');
+            $table->integer('stock_alert');
             $table->string('effects');
+            $table->string('self_number',64);
             $table->text('expiry_date');
             $table->string('status');
             $table->timestamps();

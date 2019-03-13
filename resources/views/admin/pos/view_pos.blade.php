@@ -70,9 +70,11 @@
                                                                     <tr>
                                                                         <th width="5%">Delete</th>
                                                                         <th width="20%">Name</th>
-                                                                        <th width="20%">Price</th>
+                                                                        <th width="10%">Price</th>
                                                                         <th width="20%">Quantity</th>
-                                                                        <th width="20%">Total</th>
+                                                                        <th width="20%">Available In Stock</th>
+                                                                        <th width="10%">Self Number</th>
+                                                                        <th width="15%">Total</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -84,6 +86,8 @@
                                                                             <td>{{ $item->name }}</td>
                                                                             <td>{{ $item->price }}</td>
                                                                             <td><input type="text" class="form-control cart-qty" onkeypress="numbersOnly(this)" value="{{ $item->quantity }}" ></td>
+                                                                            <td>{{ $item->attributes['available_quantity'] }}</td>
+                                                                            <td>{{ $item->attributes['self'] }}</td>
                                                                             <td  class="medicine_price">{{ $item->price * $item->quantity }}</td>
                                                                         </tr>
                                                                     @endforeach
@@ -99,25 +103,43 @@
                                     <div class="col-md-4 col-sm-12">
                                         <div class="pos_right_side">
                                             <div class="well well-lg">
-                                                <form action="{{ url('/admin/order-submit') }}" method="post" name="order-submit">
-                                                    @csrf
-                                                <div class="row">
-                                                    <div class="col-md-12 c0l-sm-12"><p class="f-16">Select customer</p></div>
-                                                    <div class="col-md-8 col-sm-8">
-                                                        <div class="form-group">
-                                                            <select name="customer_id" id="customer_id" class="js-example-basic-single col-sm-12">
-                                                                <option value="" selected="">Select customer</option>
-                                                                @foreach($save_customers as $customer)
-                                                                    <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
-                                                                @endforeach
-                                                            </select>
+                                                <div id="customerSection">
+                                                    <div class="row">
+                                                        <div class="col-md-12 c0l-sm-12">
+                                                            <p class="f-16">Customer Name ( Optional )</p>
+                                                        </div>
+                                                        <div class="col-md-8 col-sm-8">
+                                                            <form method="POST" action="{{ url('/admin/pos') }}" name="customerAutocompleteData">
+                                                                @csrf
+                                                                <input type="text" class="form-control" name="customer_name" id="customerName" placeholder="Type customer name" autocomplete="off">
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4">
+                                                            <a href="{{route('customer.create')}}" class="btn btn-info page-header-breadcrumb modal-show"><i class="ti-plus"></i> Add</a>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <?php
+                                                                if (Session::has('customer_data')){
+                                                                $customer_data = session('customer_data');
+                                                                ?>
+                                                                <div class="badge-box" style="background: #ffffff">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-10">
+                                                                            <h6>Selected Customer : {{ $customer_data['customer_name'] }}</h6>
+                                                                            <p>Customer Phone : {{ $customer_data['phone'] }}</p>
+                                                                        </div>
+                                                                        <div class="col-sm-2">
+                                                                            <button type="button" class="crm-action-delete text-danger del-customer" title="Remove Customer" style="cursor: pointer;"><i class="icofont icofont-delete-alt"></i></button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 col-sm-4">
-                                                        <a href="{{route('customer.create')}}" class="btn btn-info page-header-breadcrumb modal-show"><i class="ti-plus"></i> Add</a>
-                                                    </div>
                                                 </div>
-                                                <div class="row">
+                                                <form action="{{ url('/admin/order-submit') }}" method="post" name="order-submit">
+                                                    @csrf
+                                                    <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <div class="pos_invoice_field m-t-25">
                                                             <div class="form-group row">
@@ -158,12 +180,12 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-sm-6 f-16">Amount</label>
                                                                             <div class="col-sm-6">
-                                                                                <input type="text" class="form-control paid-amount"  name="paid-amount" id="payment" placeholder="Enter amount" value="">
+                                                                                <input type="text" class="form-control paid-amount"  name="paid-amount" id="payment" value="{{ $item_total }}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row">
                                                                             <div class="col-md-12 col-sm-12">
-                                                                                <button type="button" onclick="addPayment();" class="btn btn-info page-header-breadcrumb float-right"><i class="ti-wallet"></i> Add Payment</button>
+                                                                                <button type="button" onclick="addPayment();" class="btn btn-info page-header-breadcrumb float-right" id="addPaymentBtn"><i class="ti-wallet"></i> Add Payment</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -175,12 +197,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                    <div class="row">
                                                     <div class="col-md-12 col-sm-12">
                                                         <div class="pos_status_button">
                                                             <div class="row">
                                                                 <div class="col-md-6 col-sm-6">
-                                                                    <a href="#!" class="btn btn-danger page-header-breadcrumb float-left"><i class="ti-control-backward"></i> Cancel</a>
+                                                                    <button type="button" class="btn btn-danger page-header-breadcrumb float-left cancel-order"><i class="ti-control-backward"></i> Cancel</button>
                                                                 </div>
                                                                 <div class="col-md-6 col-sm-6">
                                                                     <button type="button" onclick="orderSubmit();" class="btn btn-info page-header-breadcrumb float-right order-submit">Submit <i class="ti-control-forward"></i></button>
@@ -236,6 +258,36 @@ $(document).ready(function () {
 
     });
 
+    /*get customer list for choosing customer*/
+    $("#customerName").keyup(function () {
+        var query = $(this).val();
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            url: 'get_customer_autocomplete_data',
+            method: "POST",
+            data: {query: query, _token: _token},
+            dataType: 'json',
+            success: function (data) {
+                if (data != undefined) {
+                    $("#customerName").autocomplete({
+                        source: data,
+                        select: function (a, ui) {
+                            $("#customerName").val(ui.item.value);
+                            if($("form[name='customerAutocompleteData']").submit()){
+                                $('#customerSection').hide();
+                            }
+                        }
+                    });
+
+                }
+
+
+
+            }
+        });
+
+    });
+
 
     /*cart quantity update*/
 
@@ -250,8 +302,19 @@ $(document).ready(function () {
                 data: {qty: qty, id: id,  _token: '{{csrf_token()}}'},
                 dataType: 'json',
                 success: function (data) {
-                    if (data != undefined){
-                        $this.closest('tr').find('td:last-child').html(data);
+                    var summedPrice = data.summedprice;
+                    var stockAlert = data.alert;
+                    //alert when quantity is low
+                    if(stockAlert){
+                        swal({
+                            type : 'error',
+                            title : 'Oops...',
+                            text : stockAlert
+                        });
+                    }
+                    //change total price
+                    if (summedPrice != undefined){
+                        $this.closest('tr').find('td:last-child').html(summedPrice);
                         //change subtotal when update quantity
                         var sum = 0;
                         // iterate through each td based on class and add the values
@@ -264,6 +327,7 @@ $(document).ready(function () {
                         });
                         $('#sub_total').val(sum);
                         $('#grand_total').val(sum);
+                        $("[name='paid-amount']").val(sum);
                     }
                 }
             });
@@ -300,6 +364,18 @@ $(document).ready(function () {
             }
         });
     });
+    /*romove selected customer*/
+    $('.del-customer').on('click', function(){
+       $.ajax({
+          url:'romove_autocomplete_customer',
+          type:'post',
+          data:{_token: '{{csrf_token()}}'},
+          dataType: 'json',
+          success:function(response) {
+                $('.badge-box').hide('slow');
+          }
+       });
+    });
     /*restrict user for type letters*/
     $('.discount').keypress(function(e) {
         if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
@@ -325,6 +401,8 @@ $(document).ready(function () {
 
          var totalDue = netAmount - paidAmount;
          $('#due_amount').val(totalDue);
+
+         $('.paid-amount').val(netAmount);
     });
 
     // show payment details div
@@ -342,6 +420,14 @@ function addPayment(){
     var paidAmount =$("[name='paid-amount']").val();
     $('#paidAmount').show();
     $('.order-submit').show();
+
+    //check paid amount
+    var grandTotal = $('#grand_total').val();
+    var reaminingAmount = grandTotal - paidAmount;
+
+    if(reaminingAmount == 0){
+        $("[name='paid-amount']").val(reaminingAmount);
+    }
 
     if(paidAmount){
         $.ajax({
@@ -445,5 +531,18 @@ function orderSubmit(){
     // var total = $("[name='total']").val();
     // var discount = $("[name='discount']").val();
 }
+
+/*cancel order*/
+$('.cancel-order').on('click', function(){
+    $.ajax({
+        url:'cancel_order',
+        type:'post',
+        data:{_token: '{{csrf_token()}}'},
+        dataType: 'json',
+        success:function(response) {
+            location.reload();
+        }
+    });
+});
 </script>
 @endsection

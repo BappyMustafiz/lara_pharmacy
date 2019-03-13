@@ -33,15 +33,24 @@ Route::group(['middleware' =>['auth']], function(){
 
 	/*pos*/
 	Route::match(['get','post'],'/admin/pos','PosController@pos');
+	Route::match(['get','post'],'/admin/customer-autocomplete','PosController@customer_autocomplete');
 	Route::get('/admin/invoice', 'PosController@invoice');
 	Route::get('/admin/invoice_list', 'PosController@invoice_list');
+    Route::match(['get','post'],'/admin/view-invoice/{id}','PosController@view_invoice');
+
+
+
 	Route::post('/admin/get_autocomplete_data', 'PosController@get_autocomplete_data');
+	Route::post('/admin/get_customer_autocomplete_data', 'PosController@get_customer_autocomplete_data');
+	Route::post('/admin/romove_autocomplete_customer', 'PosController@romove_autocomplete_customer');
 	Route::post('/admin/update_cart', 'PosController@update_cart');
 	Route::post('/admin/delete_cart', 'PosController@delete_cart');
     Route::match(['get','post'],'/admin/medicine_quick_add','PosController@medicine_quick_add');
     Route::post('/admin/add_payment', 'PosController@add_payment_type');
     Route::post('/admin/delete_payment', 'PosController@delete_payment_type');
     Route::post('/admin/order-submit', 'PosController@order_submit');
+    Route::post('/admin/cancel_order', 'PosController@cancel_order');
+    Route::match(['get','post'],'/admin/invoice','PosController@invoice');
 
 	/*Customer routes*/
 	Route::resource('/admin/customer', 'CustomerController');

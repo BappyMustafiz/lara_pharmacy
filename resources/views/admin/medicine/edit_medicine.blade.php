@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Generic Name <span class="text-danger">( Required )</span></label>
+                                        <label class="col-sm-2 col-form-label">Generic Name</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" name="generic_name" id="generic_name" value="{{$medicine_details->generic_name}}">
                                             <span class="messages"></span>
@@ -119,6 +119,20 @@
                                         <label class="col-sm-2 col-form-label">Quantity <span class="text-danger">( Required )</span></label>
                                         <div class="col-sm-10">
                                             <input type="number" class="form-control" name="quantity" id="quantity" value="{{$medicine_details->quantity}}">
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Stock Alert</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" name="stock_alert" id="stock_alert" value="{{$medicine_details->stock_alert}}">
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Self Number</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="self_number" id="self_number" value="{{$medicine_details->self_number}}">
                                             <span class="messages"></span>
                                         </div>
                                     </div>

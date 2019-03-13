@@ -17,7 +17,6 @@ class MedicineController extends Controller
     		$validatedData = $request->validate([
 		        'medicine_title' => 'required|unique:medicines',
 		        'category_id' => 'required|integer',
-		        'generic_name' => 'required',
 		        'purchase_price' => 'required',
 		        'selling_price' => 'required',
 		        'quantity' => 'required|integer',
@@ -39,6 +38,8 @@ class MedicineController extends Controller
     		$medicine->selling_price = $data['selling_price'];
     		$medicine->stored_box = $data['stored_box'];
     		$medicine->quantity = $data['quantity'];
+    		$medicine->stock_alert = $data['stock_alert'];
+    		$medicine->self_number = $data['self_number'];
     		$medicine->effects = $data['effects'];
     		$medicine->expiry_date = $data['expiry_date'];
             $medicine->status = $status;
@@ -73,7 +74,6 @@ class MedicineController extends Controller
             $validatedData = $request->validate([
                 'medicine_title' => 'required|unique:medicines,medicine_title,'. $id.',id',
                 'category_id' => 'required|integer',
-                'generic_name' => 'required',
                 'purchase_price' => 'required',
                 'selling_price' => 'required',
                 'quantity' => 'required|integer',
@@ -87,7 +87,7 @@ class MedicineController extends Controller
                 $status = 'Active';
             }
 
-            Medicine::where(['id'=>$id])->update(['medicine_title'=>$data['medicine_title'],'category_id'=>$data['category_id'],'generic_name'=>$data['generic_name'],'company_name'=>$data['company_name'],'purchase_price'=>$data['purchase_price'],'selling_price'=>$data['selling_price'],'stored_box'=>$data['stored_box'],'quantity'=>$data['quantity'],'effects'=>$data['effects'],'expiry_date'=>$data['expiry_date'],'status'=>$status]);
+            Medicine::where(['id'=>$id])->update(['medicine_title'=>$data['medicine_title'],'category_id'=>$data['category_id'],'generic_name'=>$data['generic_name'],'company_name'=>$data['company_name'],'purchase_price'=>$data['purchase_price'],'selling_price'=>$data['selling_price'],'stored_box'=>$data['stored_box'],'quantity'=>$data['quantity'],'stock_alert'=>$data['stock_alert'],'self_number'=>$data['self_number'],'effects'=>$data['effects'],'expiry_date'=>$data['expiry_date'],'status'=>$status]);
             return redirect('/admin/view_medicines')->with('flash_message_success','Medicine updated successfully');
         }
         $categories = DB::table('categories')->where('status', 'Active')->get();
