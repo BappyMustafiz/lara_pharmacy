@@ -69,8 +69,7 @@
                                                 <td>{{ $invoice->total - $invoice->discount }}</td>
                                                 <td>
                                                     <a href="{{url('/admin/view-invoice/'.$invoice->id)}}" title="Invoice" class="btn btn-info waves-effect waves-light"><i class="fa fa-window-restore"></i></a>
-                                                    <a href="{{url('/admin/view-pos-invoice/'.$invoice->id)}}" title="POS Invoice" class="btn btn-primary waves-effect waves-light"><i class="fa fa-fax"></i></a>
-                                                    <a href="{{url('/admin/edit-invoice/'.$invoice->id)}}" title="Edit Invoice" class="btn btn-success waves-effect waves-light"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{url('/admin/receipt-invoice/'.$invoice->id)}}" title="POS Invoice" class="btn btn-primary waves-effect waves-light"><i class="fa fa-fax"></i></a>
                                                     <a href="javascript:" rel="{{$invoice->id}}" rel1="delete_invoice" class="btn btn-danger waves-effect waves-light deleteRecord" title="Delete"><i class="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>

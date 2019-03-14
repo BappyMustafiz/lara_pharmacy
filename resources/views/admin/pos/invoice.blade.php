@@ -45,7 +45,8 @@
                     <div>
                         <!-- Invoice card start -->
                         <div class="card">
-                            <div class="row invoice-contact">
+                            <div  id="printDiv">
+                                <div class="row invoice-contact">
                                 <div class="col-md-8">
                                     <div class="invoice-box row">
                                         <div class="col-sm-12">
@@ -72,16 +73,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="row text-center">
-                                        <div class="col-sm-12 invoice-btn-group">
-                                            <button type="button" id="printInvoice" class="btn btn-primary btn-print-invoice waves-effect waves-light m-r-20" title="Print Invoice"><i class="ti-printer"></i> </button>
-                                            <a href="{{ url('/admin/pos') }}" type="button" class="btn btn-danger waves-effect waves-light">Back to POS</a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <div  id="printDiv">
                                 <div class="card-block">
                                     <div class="row invoice-info">
                                         @if(!empty($customer_details))
@@ -193,6 +185,14 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="button" id="printInvoice" class="btn btn-primary btn-print-invoice waves-effect waves-light m-r-20" title="Print Invoice"><i class="ti-printer"></i> </button>
+                                        <a href="{{ url('/admin/pos') }}" type="button" class="btn btn-danger waves-effect waves-light">Back to POS</a>
                                     </div>
                                 </div>
                             </div>

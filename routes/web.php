@@ -37,9 +37,8 @@ Route::group(['middleware' =>['auth']], function(){
 	Route::get('/admin/invoice', 'PosController@invoice');
 	Route::get('/admin/invoice_list', 'PosController@invoice_list');
     Route::match(['get','post'],'/admin/view-invoice/{id}','PosController@view_invoice');
-
-
-
+    Route::match(['get','post'],'/admin/receipt-invoice/{id}','PosController@view_pos_invoice');
+    Route::get('/admin/delete_invoice/{id}','PosController@delete_invoice');
 	Route::post('/admin/get_autocomplete_data', 'PosController@get_autocomplete_data');
 	Route::post('/admin/get_customer_autocomplete_data', 'PosController@get_customer_autocomplete_data');
 	Route::post('/admin/romove_autocomplete_customer', 'PosController@romove_autocomplete_customer');
@@ -51,6 +50,11 @@ Route::group(['middleware' =>['auth']], function(){
     Route::post('/admin/order-submit', 'PosController@order_submit');
     Route::post('/admin/cancel_order', 'PosController@cancel_order');
     Route::match(['get','post'],'/admin/invoice','PosController@invoice');
+
+    /*report*/
+
+    Route::match(['get','post'],'/admin/sales-report','AdminController@sales_report');
+    Route::get('/admin/out-of-stock','AdminController@out_of_stock');
 
 	/*Customer routes*/
 	Route::resource('/admin/customer', 'CustomerController');

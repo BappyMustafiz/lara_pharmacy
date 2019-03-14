@@ -176,7 +176,7 @@ $(document).ready(function(){
         $('#reportrange').daterangepicker({
             startDate: start,
             endDate: end,
-            "drops": "up",
+            "drops": "down",
             ranges: {
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],

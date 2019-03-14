@@ -57,7 +57,23 @@
                     <span data-i18n="nav.submit-issue.main">Customers</span>
                 </a>
             </li>
-            <!-- pos menu -->
+            <!-- reports menu -->
+            <li class="nav-title" data-i18n="nav.category.navigation">
+                <i class="ti-line-dashed"></i>
+                <span>Reports</span>
+            </li>
+            <li <?php if(preg_match("/report/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">
+                <a href="{{url('/admin/sales-report')}}">
+                    <i class="ti-book"></i>
+                    <span data-i18n="nav.submit-issue.main">Sales Report</span>
+                </a>
+            </li>
+            <li <?php if(preg_match("/out/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">
+                <a href="{{url('/admin/out-of-stock')}}">
+                    <i class="ti-bell"></i>
+                    <span data-i18n="nav.submit-issue.main">Stock Alert</span>
+                </a>
+            </li>
             <!-- medicine menu -->
             <li class="nav-title" data-i18n="nav.category.navigation">
                 <i class="ti-line-dashed"></i>

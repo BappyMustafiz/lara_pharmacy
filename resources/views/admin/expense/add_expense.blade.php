@@ -59,8 +59,8 @@
                                 	@csrf
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Date <span class="text-danger">( Required )</span></label>
-                                        <div class="col-sm-10">
-                                            <input id="dropper-default" name="entry_date" id="entry_date" class="form-control" type="text" placeholder="Select Expense date" />
+                                        <div class="col-sm-2">
+                                            <input id="dropper-default" name="entry_date" id="entry_date" class="form-control" type="date" placeholder="Select Expense date" />
                                             <span class="messages"></span>
                                         </div>
                                     </div>

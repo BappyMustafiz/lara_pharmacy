@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="{{asset('css/backend_css/select2/dist/css/select2.min.css')}}" />
      <!-- Date-Dropper css -->
     <link rel="stylesheet" type="text/css" href="{{asset('css/backend_css/datedropper/datedropper.min.css')}}" />
+    <!-- Date-range picker css  -->
+    <link rel="stylesheet" type="text/css" href="{{asset('css/backend_css/bootstrap-daterangepicker/daterangepicker.css')}}" />
     <!-- jquery ui css -->
     <link rel="stylesheet" type="text/css" href="{{asset('js/backend_js/jquery-ui/themes/base/jquery-ui.min.css')}}" />
     <!-- flag icon framework css -->
@@ -100,6 +102,14 @@
             float: left;
             width: 100%;
             margin-top: 10px;
+        }
+        .summary-title{
+            font-size: 17px;
+            color: #1abc9c;
+            font-weight: 700;
+        }
+        .card h5{
+            text-transform: capitalize;
         }
     </style>
 </head>

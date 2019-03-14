@@ -8,7 +8,8 @@ use App\Medicine;
 use DB;
 use Cart;
 use Session;
-use App\Category;
+use App\User;
+use Auth;
 
 class PosController extends Controller
 {	
@@ -344,8 +345,12 @@ class PosController extends Controller
     public function invoice(){
         return view('admin.pos.invoice');
     }
+
     /**
-     * method for view invoice by id
+     * method for view invoice
+     *
+     * @param $id
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function view_invoice($id){
         $invoice_data = DB::table('orders')
@@ -357,6 +362,45 @@ class PosController extends Controller
             return view('admin.404');
         }
     }
+
+    /**
+     * method for pos invoice
+     *
+     * @param $id
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view_pos_invoice($id){
+        $invoice_data = DB::table('orders')
+                            ->where('id',$id)
+                            ->get();
+
+        //get user data
+        $id = Auth::user()->id;
+        $user_details = User::where(['id'=>$id])->first();
+
+        if (sizeof($invoice_data) >0){
+            return view('admin.pos.pos_invoice')->with(compact('invoice_data','user_details'));
+        }else{
+            return view('admin.404');
+        }
+    }
+
+    /**
+     * method for delete invoice
+     *
+     * @param null $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete_invoice($id = null){
+        if(!empty($id)){
+            DB::table('orders')
+                ->where('id',$id)
+                ->update(['status'=>'deleted']);
+            return redirect()->back()->with('flash_message_success','Invoice deleted successfully');
+        }
+    }
+
+
     /**
      * method for cancel order
      *

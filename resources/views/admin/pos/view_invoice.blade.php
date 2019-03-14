@@ -40,7 +40,8 @@
                     <div>
                         <!-- Invoice card start -->
                         <div class="card">
-                            <div class="row invoice-contact">
+                            <div id="printDiv">
+                                <div class="row invoice-contact">
                                 <div class="col-md-8">
                                     <div class="invoice-box row">
                                         <div class="col-sm-12">
@@ -67,16 +68,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="row text-center">
-                                        <div class="col-sm-12 invoice-btn-group">
-                                            <button type="button" id="printInvoice" class="btn btn-primary btn-print-invoice waves-effect waves-light m-r-20" title="Print Invoice"><i class="ti-printer"></i> </button>
-                                            <a href="{{ url('/admin/invoice_list') }}" type="button" class="btn btn-danger waves-effect waves-light">Back to Invoice</a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <div  id="printDiv">
+
                                 <div class="card-block">
                                     <div class="row invoice-info">
                                         @if(!empty($customer_details))
@@ -169,13 +162,13 @@
                                                     <td>$ {{ $sub_total - $discount }}</td>
                                                 </tr>
                                                 <?php
-                                                $grand_total =  $sub_total - $discount;
-                                                $paid_amount = 0;
-                                                if(!empty($payment_details)){
-                                                    foreach($payment_details as $key => $val){
-                                                        $paid_amount += $val;
+                                                    $grand_total =  $sub_total - $discount;
+                                                    $paid_amount = 0;
+                                                    if(!empty($payment_details)){
+                                                        foreach($payment_details as $key => $val){
+                                                            $paid_amount += $val;
+                                                        }
                                                     }
-                                                }
                                                 ?>
                                                 <tr>
                                                     <th>Paid Amount :</th>
@@ -188,6 +181,14 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="button" id="printInvoice" class="btn btn-primary btn-print-invoice waves-effect waves-light m-r-20" title="Print Invoice"><i class="ti-printer"></i> </button>
+                                        <a href="{{ url('/admin/invoice_list') }}" type="button" class="btn btn-danger waves-effect waves-light">Back to Invoice</a>
                                     </div>
                                 </div>
                             </div>

@@ -42,7 +42,43 @@ class AdminController extends Controller
 
         $all_staffs = DB::table('users')->where('user_type_id',2)->where('status','Active')->get();
         $counted_staff = count($all_staffs);
-    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff'));
+
+        //get all sales today
+        $records = DB::table('orders')
+                       ->select(DB::raw('*'))
+                       ->where(['status'=>'Active'])
+                       ->whereRaw('Date(created_at) = CURDATE()')
+                       ->get();
+        if (sizeof($records) > 0){
+            $total = 0 ;
+            $discount = 0;
+            foreach ($records as $record){
+                $total += $record->total;
+                $discount += $record->discount;
+            }
+
+            $total_sales = $total - $discount;
+        }else{
+            $total_sales = 0;
+        }
+
+
+        //get todays expense
+        $expenses = DB::table('expenses')
+                        ->select(DB::raw('expense'))
+                        ->where(['status'=>'Active'])
+                        ->whereRaw('Date(created_at) = CURDATE()')
+                        ->get();
+        if (sizeof($expenses) > 0){
+            $total_expense = 0;
+            foreach ($expenses as $expense){
+                $total_expense +=$expense->expense;
+            }
+        }else{
+            $total_expense = 0;
+        }
+
+    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff','total_sales','total_expense'));
     }
 
     /*admin dashboard*/
@@ -112,5 +148,27 @@ class AdminController extends Controller
     public function logout(){
     	Session::flush();
     	return redirect('/admin')->with('flash_message_success','Logged out successfully !!!!');
+    }
+
+    /**
+     * method for sales report
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function sales_report(Request $request){
+        return view('admin.reports.sales_report');
+    }
+
+    /**
+     * method for stock alert
+     */
+    public function out_of_stock(){
+        $alert_data = DB::table('medicines')
+                          ->select(DB::raw('*'))
+                          ->where(['status'=>'Active'])
+                          ->whereRaw('stock_alert > quantity')
+                          ->get();
+        return view('admin.reports.stock_alert')->with(compact('alert_data'));
     }
 }
