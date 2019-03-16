@@ -51,6 +51,11 @@ Route::group(['middleware' =>['auth']], function(){
     Route::post('/admin/cancel_order', 'PosController@cancel_order');
     Route::match(['get','post'],'/admin/invoice','PosController@invoice');
 
+
+
+    /*returns*/
+    Route::match(['get','post'],'/admin/returns','PosController@return_medicines');
+
     /*report*/
 
     Route::match(['get','post'],'/admin/sales-report','AdminController@sales_report');

@@ -147,7 +147,7 @@
                                         <i class="icofont icofont-notification text-danger"></i>
                                     </li>
                                     <li class="text-right text-danger">
-                                        15
+                                        {{ $out_of_stock }}
                                     </li>
                                 </ul>
                             </div>

@@ -78,7 +78,7 @@ class ExpenseController extends Controller
         $categories = DB::table('expense_categories')->where('status', 'Active')->get();
         $expense_details = Expense::where(['id'=>$id])->first();
         if ($expense_details === null) {
-            abort(404);
+            return view('admin.404');
         }
         return view('admin.expense.edit_expense')->with(compact('categories','expense_details'));
     }

@@ -78,7 +78,20 @@ class AdminController extends Controller
             $total_expense = 0;
         }
 
-    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff','total_sales','total_expense'));
+        //get stock alert data
+        $alert_data = DB::table('medicines')
+                        ->select(DB::raw('*'))
+                        ->where(['status'=>'Active'])
+                        ->whereRaw('stock_alert > quantity')
+                        ->get();
+        if (sizeof($alert_data) > 0){
+            $out_of_stock = count($alert_data);
+        }else{
+            $out_of_stock = 0;
+        }
+
+
+    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff','total_sales','total_expense','out_of_stock'));
     }
 
     /*admin dashboard*/
@@ -157,7 +170,23 @@ class AdminController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function sales_report(Request $request){
-        return view('admin.reports.sales_report');
+        if ($request->isMethod('post')){
+            $selected_date = $request->input('datepicker');
+            $arr = explode("-", $selected_date);
+
+            $date_start = $arr[0];
+            $date_end = $arr[1];
+
+            $start = date("Y-m-d", strtotime($date_start));
+            $end = date("Y-m-d", strtotime($date_end));
+
+            $sales_report = DB::table('orders')
+                            ->select('*')
+                            ->whereBetween('created_at', [$start." 00:00:00", $end." 23:59:59"])
+                            ->get();
+
+        }
+        return view('admin.reports.sales_report')->with(compact('sales_report'));
     }
 
     /**

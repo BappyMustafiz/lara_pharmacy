@@ -4,7 +4,7 @@
             <a class="mobile-menu" id="mobile-collapse" href="#!">
                 <i class="ti-menu"></i>
             </a>
-            <a href="index.html">
+            <a href="https://sarosit.com/" target="_blank">
                 <img class="img-fluid" src="{{asset('images/backend_images/logo.png')}}" alt="Theme-Logo" />
             </a>
             <a class="mobile-options">
@@ -62,11 +62,6 @@
                             <i class="ti-angle-down"></i>
                         </a>
                         <ul class="show-notification profile-notification">
-                            <li>
-                                <a href="{{url('/admin/settings')}}">
-                                    <i class="ti-settings"></i> Settings
-                                </a>
-                            </li>
                             <li>
                                 <a href="{{url('/admin/usp')}}">
                                     <i class="ti-user"></i> Profile

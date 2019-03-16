@@ -68,7 +68,7 @@ class ExpenseCategoryController extends Controller
     	}
     	$category_details = ExpenseCategory::where(['id'=>$id])->first();
         if ($category_details === null) {
-            abort(404);
+            return view('admin.404');
         }
     	return view('admin.expenseCategory.edit_expense_category')->with(compact('category_details'));
     }

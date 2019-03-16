@@ -68,7 +68,7 @@ class CategoryController extends Controller
     	}
     	$category_details = Category::where(['id'=>$id])->first();
         if ($category_details === null) {
-            abort(404);
+            return view('admin.404');
         }
     	return view('admin.category.edit_category')->with(compact('category_details'));
     }

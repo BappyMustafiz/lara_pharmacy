@@ -414,4 +414,51 @@ class PosController extends Controller
             echo true;
         }
     }
+
+
+
+    //Return medicines
+
+    /**
+     * method for returning items
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function return_medicines(Request $request){
+
+        if (isset($_POST['medicine_title'])){
+            $item_id = $_POST['medicine_title'];
+            $item_id = (int) $item_id;
+        }
+        if (isset($item_id)){
+            // database query
+            $data = Medicine::where(['id'=>$item_id])->first();
+            $arr = array(
+                'id' => $data->id,
+                'name' => $data->medicine_title,
+                'price' => $data->selling_price,
+                'quantity' => 1,
+                'attributes' => array(
+                    'self' => $data->self_number,
+                    'available_quantity' => $data->quantity,
+                )
+            );
+            Cart::add($arr);
+        }
+        //set customer auto complete data into session
+        if ($request->input('customer_name')){
+            $customer_id = $request->input('customer_name');
+            $customer_id = (int) $customer_id;
+        }
+
+        if (isset($customer_id)){
+            $customer_data = Customer::where(['id'=>$customer_id])->first();
+            session(['customer_data'=> $customer_data]);
+        }
+
+
+        $receive_items = Cart::getContent();
+        $item_total = Cart::getTotal();
+        $save_customers = Customer::get()->where('status','Active');
+        return view('admin.pos.returns')->with(compact('save_customers','receive_items', 'item_total'));
+    }
 }

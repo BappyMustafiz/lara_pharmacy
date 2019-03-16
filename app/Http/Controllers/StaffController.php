@@ -134,7 +134,7 @@ class StaffController extends Controller
 
     	$user_details = User::where(['id'=>$id])->first();
         if ($user_details === null) {
-            abort(404);
+            return view('admin.404');
         }
     	return view('admin.users.edit_user')->with(compact('user_details'));
     }

@@ -93,7 +93,7 @@ class MedicineController extends Controller
         $categories = DB::table('categories')->where('status', 'Active')->get();
         $medicine_details = Medicine::where(['id'=>$id])->first();
         if ($medicine_details === null) {
-            abort(404);
+            return view('admin.404');
         }
         return view('admin.medicine.edit_medicine')->with(compact('categories','medicine_details'));
     }

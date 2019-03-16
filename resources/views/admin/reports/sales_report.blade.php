@@ -27,14 +27,17 @@
                         </div>
                         <div class="card-block">
                             <div class="well well-lg">
-                                <div class="row">
-                                    <div class="col-sm-12 col-xl-4 m-b-30">
-                                        <div id="reportrange" class="f-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                            <i class="glyphicon glyphicon-calendar icofont icofont-ui-calendar"></i>
-                                            <span></span> <b class="caret"></b>
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xl-4">
+                                            <input id="reportrange" class="f-right" name="datepicker" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%" autocomplete="off"></input>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-primary m-b-0">Search</button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
@@ -43,23 +46,39 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Entry Date</th>
-                                                <th>Expense category</th>
-                                                <th>Expense</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Invoice #</th>
+                                                <th>Customer Name</th>
+                                                <th>Sales Date</th>
+                                                <th>Sub Total</th>
+                                                <th>Discount</th>
+                                                <th>Grand Total</th>
                                             </tr>
                                             </thead>
-                                            <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Entry Date</th>
-                                                <th>Expense category</th>
-                                                <th>Expense</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </tfoot>
+                                            <tbody>
+                                            <?php
+                                                $i = 1;
+                                            ?>
+                                            @if(!empty($sales_report))
+                                                @foreach($sales_report as $report)
+                                                <tr>
+                                                    <td>{{ $i++ }}</td>
+                                                    <td><a href="{{url('/admin/view-invoice/'.$report->id)}}">{{ $report->id }}</a></td>
+                                                    <?php
+                                                        $customer_details = unserialize($report->customer_details);
+                                                    ?>
+                                                    <td>
+                                                        @if(!empty($customer_details))
+                                                            {{ $customer_details['customer_name'] }}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ date('d M Y', strtotime($report->created_at))}}</td>
+                                                    <td>{{ $report->total }}</td>
+                                                    <td>{{ $report->discount }}</td>
+                                                    <td>{{ $report->total - $report->discount }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

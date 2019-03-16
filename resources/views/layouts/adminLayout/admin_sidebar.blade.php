@@ -19,7 +19,6 @@
         <ul class="main-navigation">
             <li class="more-details">
                 <a href="{{url('/admin/usp')}}"><i class="ti-user"></i>View Profile</a>
-                <a href="{{url('/admin/settings')}}"><i class="ti-settings"></i>Settings</a>
                 <a href="{{url('/logout')}}"><i class="ti-layout-sidebar-left"></i>Logout</a>
             </li>
             <!-- dashboard menu -->
@@ -55,6 +54,17 @@
                 <a href="{{url('/admin/customer')}}">
                     <i class="icofont icofont-ui-user-group"></i>
                     <span data-i18n="nav.submit-issue.main">Customers</span>
+                </a>
+            </li>
+            <!-- receives menu -->
+            <li class="nav-title" data-i18n="nav.category.navigation">
+                <i class="ti-line-dashed"></i>
+                <span>Returns</span>
+            </li>
+            <li <?php if(preg_match("/returns/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">
+                <a href="{{url('/admin/returns')}}">
+                    <i class="ti-shopping-cart"></i>
+                    <span data-i18n="nav.submit-issue.main">Return</span>
                 </a>
             </li>
             <!-- reports menu -->
