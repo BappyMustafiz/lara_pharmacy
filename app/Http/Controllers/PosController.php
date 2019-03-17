@@ -53,7 +53,6 @@ class PosController extends Controller
             session(['customer_data'=> $customer_data]);
         }
 
-
         $items = Cart::getContent();
         $item_total = Cart::getTotal();
         $save_customers = Customer::get()->where('status','Active');
@@ -171,6 +170,29 @@ class PosController extends Controller
             $arr[] = array(
                 'value' => $val->id,
                 'label' => $val->customer_name,
+            );
+        }
+
+        echo json_encode($arr);
+    }
+    /**
+     * method for get inventory auto complete data
+     *
+     * @param Request $request
+     *
+     */
+    public function get_inventory_autocomplete_data(Request $request){
+        $query = $request->get('query');
+
+        $data = DB::table('orders')
+                ->where('id', 'LIKE', '%'.$query.'%')
+                ->limit(10)
+                ->get();
+        $arr = array();
+        foreach ($data as $val){
+            $arr[] = array(
+                'value' => $val->id,
+                'label' => $val->id,
             );
         }
 
@@ -455,10 +477,103 @@ class PosController extends Controller
             session(['customer_data'=> $customer_data]);
         }
 
+        //set inventory data into session
+        if ($request->input('inventory_id')){
+            $inventory_id = $request->input('inventory_id');
+            $inventory_id = (int) $inventory_id;
+        }
+
+        if (isset($inventory_id)){
+            $inventory_data = DB::table('orders')
+                                ->select('id','medicine_details','customer_details','total','discount')
+                                ->where('id',$inventory_id)
+                                ->get();
+            session(['inventory_data'=> $inventory_data]);
+        }
+
 
         $receive_items = Cart::getContent();
         $item_total = Cart::getTotal();
         $save_customers = Customer::get()->where('status','Active');
         return view('admin.pos.returns')->with(compact('save_customers','receive_items', 'item_total'));
+    }
+
+    /**
+     * return medicine method
+     */
+    public function return_submit(Request $request){
+        return $request;
+        $items = Cart::getContent();
+        $details = [];
+        foreach ($items as $item){
+            $medicine_id = $item->id;
+            $medicine_name = $item->name;
+            $medicine_qty = $item->quantity;
+            $medicine_price = $item->price;
+
+
+            //get medicine data for specific id
+
+            $data = DB::table('medicines')
+                        ->select('quantity')
+                        ->where('id','=',$medicine_id)
+                        ->get();
+
+            $stocked_qty = $data[0]->quantity;
+
+            $remained_qty = $stocked_qty - $medicine_qty;
+            //update medicine quantity in medicine
+            DB::table('medicines')
+                ->where("medicines.id", '=',  $medicine_id)
+                ->update(['medicines.quantity'=> $remained_qty]);
+
+
+            $details[] = array(
+                'medicine_id' => $medicine_id,
+                'medicine_name' => $medicine_name,
+                'medicine_qty' => $medicine_qty,
+                'medicine_price' => $medicine_price,
+            );
+        }
+
+
+        $medicine_details = serialize($details);
+
+        $total = $request->input('total');
+        $discount = $request->input('discount');
+        $customer_id = $request->input('customer_id');
+
+        $payments = session('payment_details');
+        $payment_details = serialize($payments);
+
+        $customer = session('customer_data');
+        $customer_details = serialize($customer);
+
+        $data_arr = array(
+            'medicine_details' => $medicine_details,
+            'total' => $total,
+            'discount' => $discount,
+            'payment_details' => $payment_details,
+            'customer_details' => $customer_details
+        );
+
+
+        session(['order_details'=> $data_arr]);
+        $insertId = DB::table('orders')->insertGetId($data_arr);
+        if ($insertId){
+            //get inserted data
+            $order_data = DB::table('orders')
+                ->select('orders.id','orders.created_at')
+                ->where('orders.id','=',$insertId)
+                ->get();
+
+            session(['order_data' => $order_data]);
+
+            Session::forget('payment_details');
+            Session::forget('customer_data');
+            Cart::clear();
+            return redirect('/admin/invoice');
+        }
+
     }
 }

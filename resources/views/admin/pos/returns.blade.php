@@ -31,6 +31,81 @@
                                 <div class="row">
                                     <div class="col-md-8 col-sm-12">
                                         <div class="pos_left_side">
+                                            {{--inventory check--}}
+                                            <div class="well well-lg">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12">
+                                                        <form method="POST" action="{{ url('/admin/returns') }}" name="inventoryAutocompleteData">
+                                                            @csrf
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Inventory ID </label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control" name="inventory_id" id="inventoryId" placeholder="Inventory / Receipt ID" autocomplete="off" autofocus>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div id="InventorySection">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <?php
+                                                                if (Session::has('inventory_data')){
+                                                                $inventory_data = session('inventory_data');
+                                                                $customer_details = unserialize($inventory_data[0]->customer_details);
+                                                                $medicine_details = unserialize($inventory_data[0]->medicine_details);
+                                                            ?>
+                                                            <div class="badge-box" style="background: #ffffff">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        @if(!empty($customer_details))
+                                                                            <h6>Customer Name : {{ $customer_details['customer_name'] }}</h6>
+                                                                            <p>Customer Phone : {{ $customer_details['phone'] }}</p>
+                                                                        @endif
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Quantity</th>
+                                                                                <th>Price</th>
+                                                                                <th>Total</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @if(!empty($medicine_details))
+                                                                                    @foreach($medicine_details as $medicine)
+                                                                                        <tr>
+                                                                                            <td>{{ $medicine['medicine_name'] }}</td>
+                                                                                            <td>{{ $medicine['medicine_qty'] }}</td>
+                                                                                            <td>{{ $medicine['medicine_price'] }}</td>
+                                                                                            <td>{{ $medicine['medicine_qty']*$medicine['medicine_price'] }}</td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                                @if(!empty($inventory_data))
+                                                                                    <tr>
+                                                                                        <th colspan="3">Sub Total</th>
+                                                                                        <td>{{ $inventory_data[0]->total }}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th colspan="3">Discount</th>
+                                                                                        <td>{{ $inventory_data[0]->discount }}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th colspan="3">Grand Total</th>
+                                                                                        <td>{{ $inventory_data[0]->total - $inventory_data[0]->discount }}</td>
+                                                                                    </tr>
+                                                                                @endif
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="well well-lg">
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
@@ -52,7 +127,7 @@
                                                     <div class="col-md-12 col-sm-12 col-lg-12">
                                                         <div class="pos-empty-item">
                                                             <div class="well bg-info">
-                                                                There are no medicine in cart.
+                                                                No return medicine in the cart.
                                                             </div>
                                                         </div>
                                                     </div>
@@ -103,12 +178,12 @@
                                                 <div id="customerSection">
                                                     <div class="row">
                                                         <div class="col-md-12 c0l-sm-12">
-                                                            <p class="f-16">Customer Name ( Optional )</p>
+                                                            <p class="f-16">Customer Name ( Required )</p>
                                                         </div>
                                                         <div class="col-md-12 col-sm-12">
                                                             <form method="POST" action="{{ url('/admin/returns') }}" name="customerAutocompleteData">
                                                                 @csrf
-                                                                <input type="text" class="form-control" name="customer_name" id="customerName" placeholder="Type customer name" autocomplete="off">
+                                                                <input type="text" class="form-control" name="customer_name" id="customerName" placeholder="Type customer name" autocomplete="off" required>
                                                             </form>
                                                         </div>
                                                         <div class="col-sm-12">
@@ -131,7 +206,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <form action="{{ url('/admin/order-submit') }}" method="post" name="order-submit">
+                                                <hr>
+                                                <form action="{{ url('/admin/return-submit') }}" method="post" name="return-submit">
                                                     @csrf
                                                     <div class="row">
                                                         <div class="col-md-12 col-sm-12">
@@ -183,7 +259,7 @@
                                                             <div class="pos_status_button">
                                                                 <div class="row">
                                                                     <div class="col-md-6 col-sm-6">
-                                                                        <button type="button" class="btn btn-danger page-header-breadcrumb float-left cancel-order"><i class="ti-control-backward"></i> Cancel</button>
+                                                                        <button type="button" class="btn btn-danger page-header-breadcrumb float-left cancel-return"><i class="ti-control-backward"></i> Cancel</button>
                                                                     </div>
                                                                     <div class="col-md-6 col-sm-6">
                                                                         <button type="button" onclick="returnSubmit();" class="btn btn-info page-header-breadcrumb float-right return-submit">Submit <i class="ti-control-forward"></i></button>
@@ -211,7 +287,7 @@
         $(document).ready(function () {
 
             //hide order submit button and payment details div
-            $('.order-submit').hide();
+            $('.return-submit').hide();
             $('#paymentDetailsDiv').hide();
             /*get medicine list for adding into cart*/
             $("#tags").keyup(function () {
@@ -268,6 +344,37 @@
 
             });
 
+            //get inventory data for check
+            $("#inventoryId").keyup(function () {
+                var query = $(this).val();
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: 'get_inventory_autocomplete_data',
+                    method: "POST",
+                    data: {query: query, _token: _token},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length == 0){
+                            swal({
+                                type : 'error',
+                                title : 'Oops...',
+                                text : 'No invoice exists.'
+                            });
+                        }else{
+                            $("#inventoryId").autocomplete({
+                                source: data,
+                                select: function (a, ui) {
+                                    $("#inventoryId").val(ui.item.value);
+                                    if($("form[name='inventoryAutocompleteData']").submit()){
+                                        $('#InventorySection').hide();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+            });
 
             /*cart quantity update*/
 
@@ -283,15 +390,6 @@
                         dataType: 'json',
                         success: function (data) {
                             var summedPrice = data.summedprice;
-                            var stockAlert = data.alert;
-                            //alert when quantity is low
-                            if(stockAlert){
-                                swal({
-                                    type : 'error',
-                                    title : 'Oops...',
-                                    text : stockAlert
-                                });
-                            }
                             //change total price
                             if (summedPrice != undefined){
                                 $this.closest('tr').find('td:last-child').html(summedPrice);
@@ -357,18 +455,18 @@
                 });
             });
             /*restrict user for type letters*/
-            $('.discount').keypress(function(e) {
+            $('#inventoryId').keypress(function(e) {
                 if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
             })
-                .on("cut copy paste",function(e){
-                    e.preventDefault();
-                });
+            .on("cut copy paste",function(e){
+                e.preventDefault();
+            });
             $('.paid-amount').keypress(function(e) {
                 if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
             })
-                .on("cut copy paste",function(e){
-                    e.preventDefault();
-                });
+            .on("cut copy paste",function(e){
+                e.preventDefault();
+            });
 
                 // show payment details div
                 var totalAmount = $("[name='total']").val();
@@ -384,7 +482,7 @@
             var paymentType = $("#paymentType").val();
             var paidAmount =$("[name='paid-amount']").val();
             $('#paidAmount').show();
-            $('.order-submit').show();
+            $('.return-submit').show();
 
             //check paid amount
             var grandTotal = $('#grand_total').val();
@@ -458,7 +556,7 @@
                             if (response === undefined || response.length == 0) {
                                 $('#paidAmount').hide();
                                 $('#paymentTypeSection').hide();
-                                $('.order-submit').hide();
+                                $('.return-submit').hide();
                             }else{
                                 var netAmount = $("[name='net-amount']").val();
                                 var paidAmount = 0;
@@ -478,16 +576,13 @@
 
         /*submit order */
         function returnSubmit(){
-
             $("form[name='return-submit']").submit();
-            // var total = $("[name='total']").val();
-            // var discount = $("[name='discount']").val();
         }
 
         /*cancel order*/
-        $('.cancel-order').on('click', function(){
+        $('.cancel-return').on('click', function(){
             $.ajax({
-                url:'cancel_order',
+                url:'cancel_return',
                 type:'post',
                 data:{_token: '{{csrf_token()}}'},
                 dataType: 'json',

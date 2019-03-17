@@ -41,6 +41,7 @@ Route::group(['middleware' =>['auth']], function(){
     Route::get('/admin/delete_invoice/{id}','PosController@delete_invoice');
 	Route::post('/admin/get_autocomplete_data', 'PosController@get_autocomplete_data');
 	Route::post('/admin/get_customer_autocomplete_data', 'PosController@get_customer_autocomplete_data');
+	Route::post('/admin/get_inventory_autocomplete_data', 'PosController@get_inventory_autocomplete_data');
 	Route::post('/admin/romove_autocomplete_customer', 'PosController@romove_autocomplete_customer');
 	Route::post('/admin/update_cart', 'PosController@update_cart');
 	Route::post('/admin/delete_cart', 'PosController@delete_cart');
@@ -48,6 +49,7 @@ Route::group(['middleware' =>['auth']], function(){
     Route::post('/admin/add_payment', 'PosController@add_payment_type');
     Route::post('/admin/delete_payment', 'PosController@delete_payment_type');
     Route::post('/admin/order-submit', 'PosController@order_submit');
+    Route::post('/admin/return-submit', 'PosController@return_submit');
     Route::post('/admin/cancel_order', 'PosController@cancel_order');
     Route::match(['get','post'],'/admin/invoice','PosController@invoice');
 
