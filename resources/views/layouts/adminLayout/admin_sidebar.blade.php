@@ -67,6 +67,12 @@
                     <span data-i18n="nav.submit-issue.main">Return</span>
                 </a>
             </li>
+            <li <?php if(preg_match("/return-list/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">
+                <a href="{{url('/admin/return-list')}}">
+                    <i class="ti-shopping-cart"></i>
+                    <span data-i18n="nav.submit-issue.main">All Returns</span>
+                </a>
+            </li>
             <!-- reports menu -->
             <li class="nav-title" data-i18n="nav.category.navigation">
                 <i class="ti-line-dashed"></i>
@@ -76,6 +82,12 @@
                 <a href="{{url('/admin/sales-report')}}">
                     <i class="ti-book"></i>
                     <span data-i18n="nav.submit-issue.main">Sales Report</span>
+                </a>
+            </li>
+            <li <?php if(preg_match("/recevings/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">
+                <a href="{{url('/admin/recevings')}}">
+                    <i class="ti-book"></i>
+                    <span data-i18n="nav.submit-issue.main">Returns Report</span>
                 </a>
             </li>
             <li <?php if(preg_match("/out/i", $url)):?> class="nav-item single-item has-class" <?php endif;?> class="nav-item single-item">

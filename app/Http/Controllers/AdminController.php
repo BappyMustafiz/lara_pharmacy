@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Image;
 use DB;
+use Excel;
 
 class AdminController extends Controller
 {
@@ -61,6 +62,24 @@ class AdminController extends Controller
         }else{
             $total_sales = 0;
         }
+        //get all returns today
+        $records = DB::table('returns')
+                       ->select(DB::raw('*'))
+                       ->where(['status'=>'Active'])
+                       ->whereRaw('Date(created_at) = CURDATE()')
+                       ->get();
+        if (sizeof($records) > 0){
+            $total = 0 ;
+            $discount = 0;
+            foreach ($records as $record){
+                $total += $record->total;
+                $discount += $record->return_charge;
+            }
+
+            $total_returns = $total - $discount;
+        }else{
+            $total_returns = 0;
+        }
 
 
         //get todays expense
@@ -91,7 +110,7 @@ class AdminController extends Controller
         }
 
 
-    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff','total_sales','total_expense','out_of_stock'));
+    	return view('admin.dashboard')->with(compact('counted_medicine','user_name','counted_staff','total_sales','total_expense','out_of_stock','total_returns'));
     }
 
     /*admin dashboard*/
@@ -188,6 +207,30 @@ class AdminController extends Controller
         }
         return view('admin.reports.sales_report')->with(compact('sales_report'));
     }
+    /**
+     * method for return report
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function returns_report(Request $request){
+        if ($request->isMethod('post')){
+            $selected_date = $request->input('datepicker');
+            $arr = explode("-", $selected_date);
+
+            $date_start = $arr[0];
+            $date_end = $arr[1];
+
+            $start = date("Y-m-d", strtotime($date_start));
+            $end = date("Y-m-d", strtotime($date_end));
+
+            $returns_report = DB::table('returns')
+                            ->select('*')
+                            ->whereBetween('created_at', [$start." 00:00:00", $end." 23:59:59"])
+                            ->get();
+        }
+        return view('admin.reports.return_report')->with(compact('returns_report'));
+    }
 
     /**
      * method for stock alert
@@ -199,5 +242,66 @@ class AdminController extends Controller
                           ->whereRaw('stock_alert > quantity')
                           ->get();
         return view('admin.reports.stock_alert')->with(compact('alert_data'));
+    }
+
+    /**
+     * method for export sales report
+     */
+    public function export_sales_report(){
+        $sales_report = DB::table('orders')
+                            ->select('*')
+                            ->get();
+
+        $sales_array[] = array('Invoice ID','Customer Name','Total', 'Discount','Sales Date');
+
+        foreach ($sales_report as $item) {
+            $customer_details = unserialize($item->customer_details);
+
+            $sales_array[] = array(
+                'Invoice ID' => $item->id,
+                'Customer Name' => $customer_details['customer_name'],
+                'Total' => $item->total,
+                'Discount' => $item->discount,
+                'Sales Date' => date('d M Y', strtotime($item->created_at))
+            );
+
+        }
+        //create excel
+        Excel::create('Sales Report', function($excel) use($sales_array) {
+            $excel->sheet('Sales Report', function($sheet) use($sales_array) {
+                $sheet->fromArray($sales_array);
+            });
+        })->download('xls');
+
+    }
+    /**
+     * method for export sales report
+     */
+    public function export_returns_report(){
+        $sales_report = DB::table('returns')
+                            ->select('*')
+                            ->get();
+
+        $sales_array[] = array('Invoice ID','Customer Name','Total', 'Discount','Sales Date');
+
+        foreach ($sales_report as $item) {
+            $customer_details = unserialize($item->customer_details);
+
+            $sales_array[] = array(
+                'Invoice ID' => $item->inventory_id,
+                'Customer Name' => $customer_details['customer_name'],
+                'Total' => $item->total,
+                'Return Charge' => $item->return_charge,
+                'Sales Date' => date('d M Y', strtotime($item->created_at))
+            );
+
+        }
+        //create excel
+        Excel::create('Returns Report', function($excel) use($sales_array) {
+            $excel->sheet('Returns Report', function($sheet) use($sales_array) {
+                $sheet->fromArray($sales_array);
+            });
+        })->download('xls');
+
     }
 }

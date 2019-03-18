@@ -218,10 +218,22 @@
                                                                         <input type="text" class="form-control" name="total" id="sub_total" value="{{ $item_total }}" readonly>
                                                                     </div>
                                                                 </div>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-6 f-16">Return Charge</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="text" class="form-control discount"  name="discount" id="discount" placeholder="Enter discount" value="">
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="form-group row">
+                                                                    <label class="col-sm-6 f-16">Net Amount</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="text" class="form-control" name="net-amount" id="grand_total" value="{{ $item_total }}" readonly>
+                                                                    </div>
+                                                                </div>
                                                                 <div id="paidAmount">
 
                                                                 </div>
-                                                                <hr>
                                                                 <div id="paymentDetailsDiv">
                                                                     <div class="row">
                                                                         <div class="col-md-12" style="background-color: beige; padding: 19px 10px 0 10px;">
@@ -461,18 +473,39 @@
             .on("cut copy paste",function(e){
                 e.preventDefault();
             });
+            $('#discount').keypress(function(e) {
+                if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
+            })
+            .on("cut copy paste",function(e){
+                e.preventDefault();
+            });
             $('.paid-amount').keypress(function(e) {
                 if(isNaN(this.value+""+String.fromCharCode(e.charCode))) return false;
             })
             .on("cut copy paste",function(e){
                 e.preventDefault();
             });
+            /*add return charge*/
+            $('.discount').on('keyup',function(){
+                var total =$("[name='total']").val();
+                var discount = $("[name='discount']").val();
+                var netAmount = total - discount;
+                $('#grand_total').val(netAmount);
 
-                // show payment details div
-                var totalAmount = $("[name='total']").val();
-                if(totalAmount > 0){
-                    $('#paymentDetailsDiv').show();
-                }
+                //if due amount exists
+                var paidAmount  = $('#net_total').val();
+
+                var totalDue = netAmount - paidAmount;
+                $('#due_amount').val(totalDue);
+
+                $('.paid-amount').val(netAmount);
+            });
+
+            // show payment details div
+            var totalAmount = $("[name='total']").val();
+            if(totalAmount > 0){
+                $('#paymentDetailsDiv').show();
+            }
         });
 
 
@@ -507,6 +540,19 @@
                                 var payment = parseFloat(v);
                                 paidAmount = paidAmount + payment;
                             });
+                            var dueAmount = netAmount - paidAmount;
+                            var paidOutput = '';
+                            paidOutput += '<div class="form-group row">';
+                            paidOutput += '<label class="col-sm-6 f-16">Paid Amount</label>';
+                            paidOutput += '<div class="col-sm-6">';
+                            paidOutput += '<input type="text" class="form-control" name="net-amount" id="net_total" value="'+ paidAmount +'" readonly>';
+                            paidOutput += '</div></div>';
+                            paidOutput += '<div class="form-group row">';
+                            paidOutput += '<label class="col-sm-6 f-16">Due Amount</label>';
+                            paidOutput += '<div class="col-sm-6">';
+                            paidOutput += '<input type="text" class="form-control" name="due-amount" id="due_amount" value="'+ dueAmount +'" readonly>';
+                            paidOutput += '</div></div>';
+                            $('#paidAmount').html(paidOutput);
 
                             //view payment details
                             var output = '';
@@ -582,7 +628,7 @@
         /*cancel order*/
         $('.cancel-return').on('click', function(){
             $.ajax({
-                url:'cancel_return',
+                url:'cancel-return',
                 type:'post',
                 data:{_token: '{{csrf_token()}}'},
                 dataType: 'json',

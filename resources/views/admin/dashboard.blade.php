@@ -37,6 +37,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card client-blocks danger-border">
+                            <div class="card-block">
+                                <h5>Returns Today</h5>
+                                <ul>
+                                    <li>
+                                        <i class="icofont icofont-cur-taka-minus text-danger"></i>
+                                    </li>
+                                    <li class="text-right text-danger">
+                                        {{ $total_returns }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Documents card end -->
                     <!-- New clients card start -->
                     <div class="col-md-6 col-xl-3">
@@ -88,8 +103,6 @@
                             </div>
                         </div>
                     </div>
-	            </div>
-                <div class="row">
                     <div class="col-md-6 col-xl-3">
                         <div class="card client-blocks primary-border">
                             <div class="card-block">
@@ -156,5 +169,5 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>
+    </div>
 @endsection

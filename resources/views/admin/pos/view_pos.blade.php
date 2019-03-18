@@ -149,7 +149,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label class="col-sm-6 f-16">Less Adjustment</label>
+                                                                <label class="col-sm-6 f-16">Discount</label>
                                                                 <div class="col-sm-6">
                                                                     <input type="text" class="form-control discount"  name="discount" id="discount" placeholder="Enter discount" value="">
                                                                 </div>

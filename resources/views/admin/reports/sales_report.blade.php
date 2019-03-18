@@ -39,6 +39,9 @@
                                     </div>
                                 </form>
                             </div>
+                            <div class="dt-plugin-buttons">
+                                <a href="{{ url('/admin/export-sales-report') }}" class="btn btn-primary m-r-10 m-b-20" style="color: #ffffff;"><i class="icofont icofont-spreadsheet"></i> Export Sales Report</a>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="dt-responsive table-responsive">

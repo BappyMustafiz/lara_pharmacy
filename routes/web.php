@@ -57,11 +57,20 @@ Route::group(['middleware' =>['auth']], function(){
 
     /*returns*/
     Route::match(['get','post'],'/admin/returns','PosController@return_medicines');
+    Route::get('/admin/returns-receipt','PosController@return_invoice');
+    Route::post('/admin/cancel-return', 'PosController@cancel_return');
+    Route::get('/admin/return-list', 'PosController@return_list');
+    Route::match(['get','post'],'/admin/view-return/{id}','PosController@view_return');
+    Route::match(['get','post'],'/admin/receipt-return-invoice/{id}','PosController@view_return_invoice');
+    Route::get('/admin/delete_return/{id}','PosController@delete_return');
 
     /*report*/
 
     Route::match(['get','post'],'/admin/sales-report','AdminController@sales_report');
+    Route::match(['get','post'],'/admin/recevings','AdminController@returns_report');
     Route::get('/admin/out-of-stock','AdminController@out_of_stock');
+    Route::get('/admin/export-sales-report','AdminController@export_sales_report');
+    Route::get('/admin/export-returns-report','AdminController@export_returns_report');
 
 	/*Customer routes*/
 	Route::resource('/admin/customer', 'CustomerController');

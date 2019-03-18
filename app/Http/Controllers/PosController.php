@@ -502,7 +502,8 @@ class PosController extends Controller
      * return medicine method
      */
     public function return_submit(Request $request){
-        return $request;
+        $return_details = session('inventory_data');
+        $inventory_id = $return_details[0]->id;
         $items = Cart::getContent();
         $details = [];
         foreach ($items as $item){
@@ -521,7 +522,7 @@ class PosController extends Controller
 
             $stocked_qty = $data[0]->quantity;
 
-            $remained_qty = $stocked_qty - $medicine_qty;
+            $remained_qty = $stocked_qty + $medicine_qty;
             //update medicine quantity in medicine
             DB::table('medicines')
                 ->where("medicines.id", '=',  $medicine_id)
@@ -541,7 +542,6 @@ class PosController extends Controller
 
         $total = $request->input('total');
         $discount = $request->input('discount');
-        $customer_id = $request->input('customer_id');
 
         $payments = session('payment_details');
         $payment_details = serialize($payments);
@@ -550,30 +550,119 @@ class PosController extends Controller
         $customer_details = serialize($customer);
 
         $data_arr = array(
-            'medicine_details' => $medicine_details,
+            'inventory_id' => $inventory_id,
+            'item_details' => $medicine_details,
+            'return_details' => $return_details,
+            'customer_details' => $customer_details,
+            'return_type' => $payment_details,
             'total' => $total,
-            'discount' => $discount,
-            'payment_details' => $payment_details,
-            'customer_details' => $customer_details
+            'return_charge' => $discount,
         );
 
 
-        session(['order_details'=> $data_arr]);
-        $insertId = DB::table('orders')->insertGetId($data_arr);
+        session(['return_details'=> $data_arr]);
+        $insertId = DB::table('returns')->insertGetId($data_arr);
         if ($insertId){
             //get inserted data
-            $order_data = DB::table('orders')
-                ->select('orders.id','orders.created_at')
-                ->where('orders.id','=',$insertId)
-                ->get();
+            $order_data = DB::table('returns')
+                            ->select('returns.id','returns.created_at')
+                            ->where('returns.id','=',$insertId)
+                            ->get();
 
-            session(['order_data' => $order_data]);
+            session(['return_data' => $order_data]);
 
-            Session::forget('payment_details');
+            Session::forget('return_type');
+            Session::forget('inventory_data');
             Session::forget('customer_data');
             Cart::clear();
-            return redirect('/admin/invoice');
+            return redirect('/admin/returns-receipt');
         }
 
     }
+
+    /**
+     * method for invoice return
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function return_invoice(){
+        return view('admin.pos.return_invoice');
+    }
+    /**
+     * method for cancel order
+     *
+     * @param Request $request
+     */
+    public function cancel_return(Request $request){
+        if ($request->isMethod('post')){
+            Cart::clear();
+            Session::forget('return_type');
+            Session::forget('customer_data');
+            Session::forget('inventory_data');
+            echo true;
+        }
+    }
+
+    /*return list */
+    public function return_list(){
+        $invoices = DB::table('returns')
+            ->where('status', 'Active')
+            ->select('id','inventory_id','customer_details','total','return_charge','created_at')
+            ->get();
+        return view('admin.pos.return_list')->with(compact('invoices'));
+    }
+
+    /**
+     * method for view invoice
+     *
+     * @param $id
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view_return($id){
+        $invoice_data = DB::table('returns')
+            ->where('id',$id)
+            ->get();
+        if (sizeof($invoice_data) >0){
+            return view('admin.pos.view_return')->with(compact('invoice_data'));
+        }else{
+            return view('admin.404');
+        }
+    }
+
+    /**
+     * method for pos invoice
+     *
+     * @param $id
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view_return_invoice($id){
+        $invoice_data = DB::table('returns')
+            ->where('id',$id)
+            ->get();
+
+        //get user data
+        $id = Auth::user()->id;
+        $user_details = User::where(['id'=>$id])->first();
+
+        if (sizeof($invoice_data) >0){
+            return view('admin.pos.pos_return')->with(compact('invoice_data','user_details'));
+        }else{
+            return view('admin.404');
+        }
+    }
+
+    /**
+     * method for delete invoice
+     *
+     * @param null $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete_return($id = null){
+        if(!empty($id)){
+            DB::table('returns')
+                ->where('id',$id)
+                ->update(['status'=>'deleted']);
+            return redirect()->back()->with('flash_message_success','Return deleted successfully');
+        }
+    }
+
 }
